@@ -1,0 +1,33 @@
+{
+  "name": "uchamb/filament-core",
+  "description": "Filament core package",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ucha Gviniashvili",
+      "email": "ucha4964@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^8.2",
+    "filament/filament": "^3.2",
+    "google/cloud-translate": "^1.17"
+  },
+  "autoload": {
+    "psr-4": {
+      "Filament\\Core\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Filament\\Core\\FilamentCoreServiceProvider"
+      ]
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
