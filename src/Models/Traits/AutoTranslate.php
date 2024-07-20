@@ -12,6 +12,8 @@ trait AutoTranslate
     $locales = config('app.locales');
 
     static::created(function ($model) use($currentLocale, $locales) {
+      $nonTranslatableFields = ['is_published', 'slug'];
+
       $fieldsToTranslate = $model->translatable;
 
       $translateService = app(GoogleTranslateService::class);
@@ -22,6 +24,10 @@ trait AutoTranslate
         }
 
         foreach ($fieldsToTranslate as $field) {
+          if (in_array($field, $nonTranslatableFields)) {
+            continue;
+          }
+
           if(!$model->getTranslation($field, $currentLocale)) {
             continue;
           }
