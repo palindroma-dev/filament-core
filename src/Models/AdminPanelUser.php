@@ -2,7 +2,6 @@
 
 namespace Filament\Core\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -13,6 +12,10 @@ use Spatie\Permission\Traits\HasRoles;
 class AdminPanelUser extends Authenticatable implements FilamentUser
 {
   use HasFactory, Notifiable, hasRoles;
+
+  protected $table = 'admins';
+
+  protected array $guard_name = ['admin-panel', 'web'];
 
   /**
    * The attributes that are mass assignable.

@@ -4,6 +4,7 @@ namespace Filament\Core;
 
 use Spatie\LaravelPackageTools\Package;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class FilamentCoreServiceProvider extends ServiceProvider
 {
@@ -27,6 +28,15 @@ class FilamentCoreServiceProvider extends ServiceProvider
     ], 'config');
 
     $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+
+    $this->loadFactories();
+  }
+
+  protected function loadFactories(): void
+  {
+    Factory::guessFactoryNamesUsing(function (string $modelName) {
+      return 'Filament\\Core\\Database\\Factories\\' . class_basename($modelName) . 'Factory';
+    });
   }
 
   public function packageConfigured(Package $package): void
