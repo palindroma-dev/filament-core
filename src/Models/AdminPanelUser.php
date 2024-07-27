@@ -15,7 +15,7 @@ class AdminPanelUser extends Authenticatable implements FilamentUser
 
   protected $table = 'admins';
 
-  protected array $guard_name = ['admin-panel', 'web'];
+  protected string $guard_name = 'admin-panel';
 
   /**
    * The attributes that are mass assignable.
