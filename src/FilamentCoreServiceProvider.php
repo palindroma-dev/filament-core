@@ -25,6 +25,8 @@ class FilamentCoreServiceProvider extends ServiceProvider
     $this->publishes([
       __DIR__ . '/../config/filament-core.php' => config_path('filament-core.php'),
     ], 'config');
+
+    $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
   }
 
   public function packageConfigured(Package $package): void
