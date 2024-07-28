@@ -2,12 +2,10 @@
 
 namespace Filament\Core\Resources;
 
-use Closure;
-use Filament\Facades\Filament;
 use Filament\Forms;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\Field;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Form;

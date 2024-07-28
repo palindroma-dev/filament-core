@@ -3,8 +3,8 @@
 namespace Filament\Core;
 
 use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
-use Filament\PanelProvider;
 use Filament\Panel;
+use Filament\PanelProvider;
 use Filament\SpatieLaravelTranslatablePlugin;
 
 abstract class FilamentCoreAdminPanelProvider extends PanelProvider

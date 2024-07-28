@@ -2,9 +2,9 @@
 
 namespace Filament\Core;
 
-use Spatie\LaravelPackageTools\Package;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\ServiceProvider;
+use Spatie\LaravelPackageTools\Package;
 
 class FilamentCoreServiceProvider extends ServiceProvider
 {
@@ -18,6 +18,10 @@ class FilamentCoreServiceProvider extends ServiceProvider
   {
     $this->mergeConfigFrom(
       __DIR__ . '/../config/filament-core.php', 'filament-core'
+    );
+
+    $this->mergeConfigFrom(
+      __DIR__ . '/../config/permission.php', 'permission'
     );
   }
 
