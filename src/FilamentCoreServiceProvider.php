@@ -34,6 +34,8 @@ class FilamentCoreServiceProvider extends ServiceProvider
     $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
     $this->loadFactories();
+
+    $this->loadViewsFrom(__DIR__.'/../resources/views', 'filament-core');
   }
 
   protected function loadFactories(): void

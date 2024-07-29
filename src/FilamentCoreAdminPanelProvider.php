@@ -24,7 +24,7 @@ abstract class FilamentCoreAdminPanelProvider extends PanelProvider
       ->plugin(
         BreezyCore::make()
         ->myProfile()
-        ->enableTwoFactorAuthentication(force: true)
+        ->enableTwoFactorAuthentication(force: config('filament-core.force_two_factor_auth'))
         ->passwordUpdateRules(
           rules: [Password::default()->mixedCase()->uncompromised(3)], // you may pass an array of validation rules as well. (default = ['min:8'])
         )
