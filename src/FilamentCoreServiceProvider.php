@@ -2,8 +2,11 @@
 
 namespace Filament\Core;
 
+use Filament\Facades\Filament;
+use Filament\Navigation\NavigationItem;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\ServiceProvider;
+use RyanChandler\FilamentNavigation\Models\Navigation;
 use Spatie\LaravelPackageTools\Package;
 
 class FilamentCoreServiceProvider extends ServiceProvider
@@ -36,6 +39,17 @@ class FilamentCoreServiceProvider extends ServiceProvider
     $this->loadFactories();
 
     $this->loadViewsFrom(__DIR__.'/../resources/views', 'filament-core');
+
+    Filament::serving(function () {
+      Filament::registerNavigationItems([
+        ...Navigation::get()->map(function (Navigation $navigation) {
+          return NavigationItem::make($navigation->name)
+            ->url(route('filament.admin.resources.navigations.edit', $navigation->id))
+            ->icon('heroicon-o-bars-3')
+            ->group('Navigation');
+        })->toArray(),
+      ]);
+    });
   }
 
   protected function loadFactories(): void
