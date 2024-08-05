@@ -42,7 +42,7 @@ class FilamentCoreServiceProvider extends ServiceProvider
 
     Filament::serving(function () {
       Filament::registerNavigationItems([
-        ...Navigation::get()->map(function (Navigation $navigation) {
+        ...Navigation::orderBy('id', 'ASC')->get()->map(function (Navigation $navigation) {
           return NavigationItem::make($navigation->name)
             ->url(route('filament.admin.resources.navigations.edit', $navigation->id))
             ->icon('heroicon-o-bars-3')
