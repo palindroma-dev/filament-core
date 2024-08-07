@@ -3,6 +3,7 @@
 namespace Filament\Core;
 
 use Filament\Facades\Filament;
+use Filament\Navigation\NavigationGroup;
 use Filament\Navigation\NavigationItem;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\ServiceProvider;
@@ -48,6 +49,14 @@ class FilamentCoreServiceProvider extends ServiceProvider
             ->icon('heroicon-o-bars-3')
             ->group('Navigation');
         })->toArray(),
+      ]);
+
+      Filament::registerNavigationGroups([
+        NavigationGroup::make('Navigation')->collapsed(),
+        NavigationGroup::make('Site Content')->collapsed(),
+        NavigationGroup::make('Configurations')->collapsed(),
+        NavigationGroup::make('Taxonomies')->collapsed(),
+        NavigationGroup::make('Roles and Permissions')->collapsed(),
       ]);
     });
   }

@@ -12,7 +12,7 @@ trait AutoTranslate
     $locales = config('app.locales');
 
     static::created(function ($model) use($currentLocale, $locales) {
-      $nonTranslatableFields = ['is_published', 'slug'];
+      $nonTranslatableFields = ['is_published', 'slug', 'button_link', 'link'];
 
       $fieldsToTranslate = $model->translatable;
 
