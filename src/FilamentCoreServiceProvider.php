@@ -64,6 +64,12 @@ class FilamentCoreServiceProvider extends ServiceProvider
   protected function loadFactories(): void
   {
     Factory::guessFactoryNamesUsing(function (string $modelName) {
+      $defaultFactoryNamespace = 'Database\\Factories\\' . class_basename($modelName) . 'Factory';
+
+      if (class_exists($defaultFactoryNamespace)) {
+        return $defaultFactoryNamespace;
+      }
+
       return 'Filament\\Core\\Database\\Factories\\' . class_basename($modelName) . 'Factory';
     });
   }
