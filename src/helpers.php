@@ -12,7 +12,7 @@ function getNavigationLink(array $item): string {
     }
 
     return $prefix . $data['page_slug'];
-  } else if (preg_match('/^https?:\/\//', $data['url'])) {
+  } else if (preg_match('/^https?:\/\//', $data['url']) || preg_match('/^\#/', $data['url'])) {
     return $data['url'];
   } else {
     return $prefix . trim($data['url'], '/');
