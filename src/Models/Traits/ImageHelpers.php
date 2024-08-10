@@ -69,7 +69,8 @@ trait ImageHelpers
     if (!$width) {
       $originalImage = ImageManager::imagick()->read($media->getPath());
       $width = $originalImage->width();
-      $media->update(['custom_properties' => ['original_width' => $width]]);
+      $height = $originalImage->height();
+      $media->update(['custom_properties' => ['original_width' => $width, 'original_height' => $height]]);
     }
 
     foreach ($conversionVariants as $conversionVariant => $maxSize) {
