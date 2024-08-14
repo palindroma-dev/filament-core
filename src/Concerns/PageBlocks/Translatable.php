@@ -9,7 +9,12 @@ trait Translatable
     $locale = app()->getLocale();
 
     foreach(self::$translatable as $attribute) {
-      $data[$attribute] = $data[$locale][$attribute] ?? '';
+      if(str_contains($attribute, '.')) {
+        [ $firstPart ] = explode('.', $attribute);
+        $data[$firstPart] = $data[$locale][$firstPart];
+      } else {
+        $data[$attribute] = $data[$locale][$attribute] ?? '';
+      }
     }
 
     return $data;
@@ -21,8 +26,18 @@ trait Translatable
       $data[$locale] = [];
 
       foreach(self::$translatable as $attribute) {
-        $data[$locale][$attribute] = $data[$locale.'_'.$attribute] ?? '';
-        unset($data[$locale.'_'.$attribute]);
+        if(str_contains($attribute, '.')) {
+          [ $firstPart, $secondPart ] = explode('.', $attribute);
+          $data[$locale][$firstPart] = $data[$locale][$firstPart] ?? [];
+          $data[$locale][$firstPart] = array_map(function ($item) use($locale, $firstPart, $secondPart) {
+            $item[$secondPart] = $item[$locale.'_'.$secondPart] ?? '';
+            unset($item[$locale.'_'.$secondPart]);
+            return $item;
+          }, $data[$firstPart]);
+        } else {
+          $data[$locale][$attribute] = $data[$locale . '_' . $attribute] ?? '';
+          unset($data[$locale . '_' . $attribute]);
+        }
       }
     }
 
