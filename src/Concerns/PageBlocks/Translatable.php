@@ -11,7 +11,7 @@ trait Translatable
     foreach(self::$translatable as $attribute) {
       if(str_contains($attribute, '.')) {
         [ $firstPart ] = explode('.', $attribute);
-        $data[$firstPart] = $data[$locale][$firstPart];
+        $data[$firstPart] = $data[$locale][$firstPart] ?? [];
       } else {
         $data[$attribute] = $data[$locale][$attribute] ?? '';
       }
@@ -33,7 +33,7 @@ trait Translatable
             $item[$secondPart] = $item[$locale.'_'.$secondPart] ?? '';
             unset($item[$locale.'_'.$secondPart]);
             return $item;
-          }, $data[$firstPart]);
+          }, $data[$firstPart] ?? []);
         } else {
           $data[$locale][$attribute] = $data[$locale . '_' . $attribute] ?? '';
           unset($data[$locale . '_' . $attribute]);
