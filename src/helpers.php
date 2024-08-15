@@ -18,3 +18,8 @@ function getNavigationLink(array $item): string {
     return $prefix . trim($data['url'], '/');
   }
 }
+
+function internalLink($slug): string
+{
+  return URL::to('/') . '/' . app()->getLocale() . '/' . $slug;
+}
