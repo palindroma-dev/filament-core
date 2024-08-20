@@ -11,6 +11,7 @@
     <x-filament::tabs :contained="true" :label="$getLabel()">
       @foreach ($getOptions() as $value => $label)
         <x-filament::tabs.item
+          class="filament-core-locale-action-tab"
           :alpine-active="'$wire.activeLocale === \'' . $value . '\''"
           x-on:click="changeLanguage('{{ $value }}')"
         >
