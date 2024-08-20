@@ -58,6 +58,8 @@ class FilamentCoreServiceProvider extends ServiceProvider
         NavigationGroup::make('Taxonomies')->collapsed(),
         NavigationGroup::make('Roles and Permissions')->collapsed(),
       ]);
+
+      Filament::registerViteTheme('resources/css/filament/admin/filament-core.css');
     });
   }
 
