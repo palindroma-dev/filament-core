@@ -57,6 +57,26 @@ trait Translatable
       $localeData = $this->mutateFormDataBeforeCreate($localeData);
 
       foreach (Arr::only($localeData, $translatableAttributes) as $key => $value) {
+        if(($value['type'] ?? null) == 'doc' && isset($value['content'])) {
+          $value = tiptap_converter()->asHTML($value);
+        } else {
+          if(is_array($value) && (array_values($value)[0] ?? null)) {
+            $value = array_values($value);
+          }
+
+          if(is_array($value)) {
+            foreach($value as &$item) {
+              if(is_array($item)) {
+                foreach($item as $key2 => $value2) {
+                  if(is_array($value2) && (array_values($value2)[0] ?? null)) {
+                    $item[$key2] = array_values($value2)[0];
+                  }
+                }
+              }
+            }
+          }
+        }
+
         $record->setTranslation($key, $locale, $value);
       }
     }
