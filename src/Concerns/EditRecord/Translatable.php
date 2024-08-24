@@ -48,6 +48,10 @@ trait Translatable
                 ...$localeData,
             ];
 
+            if(method_exists($this, 'mutateOtherLocaleData')) {
+              $this->data = $this->mutateOtherLocaleData($this->data);
+            }
+
             try {
                 $this->form->validate();
             } catch (ValidationException $exception) {
@@ -63,26 +67,9 @@ trait Translatable
             $localeData = $this->mutateFormDataBeforeSave($localeData);
 
             foreach (Arr::only($localeData, $translatableAttributes) as $key => $value) {
-              if(($value['type'] ?? null) == 'doc' && isset($value['content'])) {
-                $value = tiptap_converter()->asHTML($value);
-              } else {
-                if(is_array($value) && (array_values($value)[0] ?? null)) {
-                  $value = array_values($value);
-                }
-
-                if(is_array($value)) {
-                  foreach($value as &$item) {
-                    if(is_array($item)) {
-                      foreach($item as $key2 => $value2) {
-                        if(is_array($value2) && (array_values($value2)[0] ?? null)) {
-                          $item[$key2] = array_values($value2)[0];
-                        }
-                      }
-                    }
-                  }
-                }
+              if(method_exists($this, 'mutateOtherLocaleDataBeforeSave')) {
+                $value = $this->mutateOtherLocaleDataBeforeSave($key, $value);
               }
-
               $record->setTranslation($key, $locale, $value);
             }
         }
@@ -111,6 +98,10 @@ trait Translatable
         $translatableAttributes = static::getResource()::getTranslatableAttributes();
 
         $this->otherLocaleData[$this->oldActiveLocale] = Arr::only($this->data, $translatableAttributes);
+
+        if(isset($this->otherLocaleData[$this->activeLocale]) && method_exists($this, 'mutateOtherLocaleData')) {
+          $this->otherLocaleData[$this->activeLocale] = $this->mutateOtherLocaleData($this->otherLocaleData[$this->activeLocale]);
+        }
 
         $this->data = [
             ...Arr::except($this->data, $translatableAttributes),

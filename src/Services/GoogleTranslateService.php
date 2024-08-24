@@ -17,10 +17,14 @@ class GoogleTranslateService
 
   public function translate($text, $targetLanguage = 'en')
   {
-    $result = $this->translate->translate($text, [
-      'target' => $targetLanguage
-    ]);
+    if(is_string($text)) {
+      $result = $this->translate->translate($text, [
+        'target' => $targetLanguage
+      ]);
 
-    return $result['text'];
+      return $result['text'];
+    }
+
+    return $text;
   }
 }
