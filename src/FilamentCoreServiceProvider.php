@@ -2,6 +2,7 @@
 
 namespace Filament\Core;
 
+use App\Enums\Permissions;
 use Filament\Facades\Filament;
 use Filament\Navigation\NavigationGroup;
 use Filament\Navigation\NavigationItem;
@@ -42,14 +43,16 @@ class FilamentCoreServiceProvider extends ServiceProvider
     $this->loadViewsFrom(__DIR__.'/../resources/views', 'filament-core');
 
     Filament::serving(function () {
-      Filament::registerNavigationItems([
-        ...Navigation::orderBy('id', 'ASC')->get()->map(function (Navigation $navigation) {
-          return NavigationItem::make($navigation->name)
-            ->url(route('filament.admin.resources.navigations.edit', $navigation->id))
-            ->icon('heroicon-o-bars-3')
-            ->group('Navigation');
-        })->toArray(),
-      ]);
+      if(auth()->user() && auth()->user()->can(Permissions::ManageNavigation->value)) {
+        Filament::registerNavigationItems([
+          ...Navigation::orderBy('id', 'ASC')->get()->map(function (Navigation $navigation) {
+            return NavigationItem::make($navigation->name)
+              ->url(route('filament.admin.resources.navigations.edit', $navigation->id))
+              ->icon('heroicon-o-bars-3')
+              ->group('Navigation');
+          })->toArray(),
+        ]);
+      }
 
       Filament::registerNavigationGroups([
         NavigationGroup::make('Navigation')->collapsed(),
