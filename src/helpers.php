@@ -42,3 +42,17 @@ function generateUniqueSlug(string $originalSlug): string
 {
   return $originalSlug . '-' . rand(1000000, 10000000);
 }
+
+function getMediaUrl($mediaUrl): string {
+  $mediaUrl = is_array($mediaUrl) ? array_values($mediaUrl)[0] : $mediaUrl;
+
+  $defaultMediaDisk = config('media-library.disk_name') ?? 'public';
+  $rootFolder = config('filesystems.disks.'.$defaultMediaDisk.'.root') ?? null;
+
+  if($defaultMediaDisk == 's3') {
+    $s3Url = config('filesystems.disks.'.$defaultMediaDisk.'.url') ?? null;
+    return $s3Url .'/' . ($rootFolder ? $rootFolder . '/' : '') . $mediaUrl;
+  } else {
+    return URL::to('/') . '/' . ($rootFolder ? $rootFolder . '/' : '') . $mediaUrl;
+  }
+}
