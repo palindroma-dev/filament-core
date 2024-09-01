@@ -2,7 +2,7 @@
 
 namespace Filament\Core\Models\Traits;
 
-use Intervention\Image\ImageManager;
+use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
@@ -67,10 +67,20 @@ trait ImageHelpers
     $width = $media?->getCustomProperty('original_width');
 
     if (!$width) {
-      $originalImage = ImageManager::imagick()->read($media->getPath());
-      $width = $originalImage->width();
-      $height = $originalImage->height();
-      $media->update(['custom_properties' => ['original_width' => $width, 'original_height' => $height]]);
+
+      if($media->disk == 's3') {
+        $path = ltrim($media->getPath(),  config('filesystems.disks.s3.root').'/');
+        $s3Url = Storage::disk($media->disk)->url($path);
+        $imageSize = getimagesize($s3Url);
+      } else {
+        $imageSize = getimagesize($media->getPath());
+      }
+
+      if ($imageSize) {
+        $width = $imageSize[0];
+        $height = $imageSize[1];
+        $media->update(['custom_properties' => ['original_width' => $width, 'original_height' => $height]]);
+      }
     }
 
     foreach ($conversionVariants as $conversionVariant => $maxSize) {
