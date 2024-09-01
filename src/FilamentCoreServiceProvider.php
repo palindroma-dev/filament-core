@@ -57,8 +57,9 @@ class FilamentCoreServiceProvider extends ServiceProvider
       Filament::registerNavigationGroups([
         NavigationGroup::make('Navigation')->collapsed(),
         NavigationGroup::make('Site Content')->collapsed(),
-        NavigationGroup::make('Configurations')->collapsed(),
         NavigationGroup::make('Taxonomies')->collapsed(),
+        NavigationGroup::make('Configurations')->collapsed(),
+        NavigationGroup::make('Settings')->collapsed(),
         NavigationGroup::make('Roles and Permissions')->collapsed(),
       ]);
 
