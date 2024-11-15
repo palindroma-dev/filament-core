@@ -32,4 +32,8 @@ class BasicSeeder extends Seeder
       }
     });
   }
+
+  protected function createLocalizedData($callback, $locales): array {
+    return array_combine($locales, array_map($callback, $locales));
+  }
 }
