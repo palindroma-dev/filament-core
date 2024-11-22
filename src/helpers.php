@@ -56,3 +56,8 @@ function getMediaUrl($mediaUrl): string {
     return URL::to('/') . '/' . ($rootFolder ? $rootFolder . '/' : '') . $mediaUrl;
   }
 }
+
+function createLocalizedData($callback): array {
+  $locales = config('app.locales');
+  return array_combine($locales, array_map($callback, $locales));
+}
