@@ -41,7 +41,11 @@ trait ImageHelpers
       if ($title) {
         $attrs['title'] = $title;
       }
-      $output = $firstImage->img($size, array_merge($attrs, $attributes))->lazy();
+      if($firstImage->extension == 'svg') {
+        $output = $firstImage->img('', array_merge($attrs, $attributes));
+      } else {
+        $output = $firstImage->img($size, array_merge($attrs, $attributes))->lazy();
+      }
     } else {
       $output = '<img src="assets/img/placeholder.png" class="' . $className . '" alt="placeholder" '.$attributesString.'/>';
     }
@@ -65,9 +69,11 @@ trait ImageHelpers
     ];
 
     $width = $media?->getCustomProperty('original_width');
+    $extension = $media->extension;
 
-    if (!$width) {
-
+    if($extension == 'svg') {
+      $conversionVariants = [];
+    } else if (!$width) {
       if($media->disk == 's3') {
         $path = ltrim($media->getPath(),  config('filesystems.disks.s3.root').'/');
         $s3Url = Storage::disk($media->disk)->url($path);
