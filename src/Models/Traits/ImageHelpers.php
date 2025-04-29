@@ -47,7 +47,7 @@ trait ImageHelpers
         $output = $firstImage->img($size, array_merge($attrs, $attributes))->lazy();
       }
     } else {
-      $output = '<img src="assets/img/placeholder.png" class="' . $className . '" alt="placeholder" '.$attributesString.'/>';
+      $output = '<img src="/assets/img/placeholder.png" class="' . $className . '" alt="placeholder" '.$attributesString.'/>';
     }
 
     if ($print) {
