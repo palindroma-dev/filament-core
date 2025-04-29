@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 function getNavigationLink(array $item): string {
   $prefix = URL::to('/') . '/' . app()->getLocale() . '/';
   $data = $item['data'];
+  $url = $data['url'] ?? '#';
 
   if($item['type'] == 'page' && isset($data['page_slug'])) {
     if($data['page_slug'] == '/') {
@@ -13,10 +14,10 @@ function getNavigationLink(array $item): string {
     }
 
     return $prefix . $data['page_slug'];
-  } else if (preg_match('/^https?:\/\//', $data['url']) || preg_match('/^\#/', $data['url'])) {
-    return $data['url'];
+  } else if (preg_match('/^https?:\/\//', $url) || preg_match('/^\#/', $url)) {
+    return $url;
   } else {
-    return $prefix . trim($data['url'], '/');
+    return $prefix . trim($url, '/');
   }
 }
 
