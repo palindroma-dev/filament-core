@@ -56,12 +56,12 @@ class FilamentCoreServiceProvider extends ServiceProvider
       }
 
       Filament::registerNavigationGroups([
-        NavigationGroup::make('Navigation')->collapsed(),
-        NavigationGroup::make('Site Content')->collapsed(),
-        NavigationGroup::make('Taxonomies')->collapsed(),
-        NavigationGroup::make('Configurations')->collapsed(),
-        NavigationGroup::make('Settings')->collapsed(),
-        NavigationGroup::make('Roles and Permissions')->collapsed(),
+        NavigationGroup::make(__('Navigation'))->collapsed(),
+        NavigationGroup::make(__('Site Content'))->collapsed(),
+        NavigationGroup::make(__('Taxonomies'))->collapsed(),
+        NavigationGroup::make(__('Configurations'))->collapsed(),
+        NavigationGroup::make(__('Settings'))->collapsed(),
+        NavigationGroup::make(__('Roles and Permissions'))->collapsed(),
       ]);
 
       Filament::registerViteTheme('resources/css/filament/admin/filament-core.css');
