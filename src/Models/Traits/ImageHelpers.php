@@ -71,6 +71,13 @@ trait ImageHelpers
     $width = $media?->getCustomProperty('original_width');
     $extension = $media->extension;
 
+    if ($media && $media->disk !== 's3' && !in_array($extension, ['svg', 'webp'])) {
+      if (! $this->imageHasTransparency($media->getPath(), $extension)) {
+        $this->convertToWebp($media);
+        $extension = 'webp';
+      }
+    }
+
     if($extension == 'svg') {
       $conversionVariants = [];
     } else if (!$width) {
@@ -99,5 +106,73 @@ trait ImageHelpers
           ->performOnCollections($collection);
       }
     }
+  }
+
+  private function imageHasTransparency(string $path, string $extension): bool
+  {
+    $extension = strtolower($extension);
+
+    if ($extension === 'png') {
+      $image = @imagecreatefrompng($path);
+      if (! $image) {
+        return false;
+      }
+      $width = imagesx($image);
+      $height = imagesy($image);
+      for ($x = 0; $x < $width; $x++) {
+        for ($y = 0; $y < $height; $y++) {
+          $alpha = (imagecolorat($image, $x, $y) & 0x7F000000) >> 24;
+          if ($alpha > 0) {
+            imagedestroy($image);
+            return true;
+          }
+        }
+      }
+      imagedestroy($image);
+      return false;
+    }
+
+    if ($extension === 'gif') {
+      $image = @imagecreatefromgif($path);
+      if (! $image) {
+        return false;
+      }
+      $transparentIndex = imagecolortransparent($image);
+      imagedestroy($image);
+      return $transparentIndex >= 0;
+    }
+
+    return false;
+  }
+
+  private function convertToWebp(Media $media): void
+  {
+    $path = $media->getPath();
+    $extension = strtolower($media->extension);
+
+    if ($extension === 'png') {
+      $image = @imagecreatefrompng($path);
+    } elseif ($extension === 'gif') {
+      $image = @imagecreatefromgif($path);
+    } else {
+      $image = @imagecreatefromjpeg($path);
+    }
+
+    if (! $image) {
+      return;
+    }
+
+    $webpPath = preg_replace('/\.[^.]+$/', '.webp', $path);
+    imagewebp($image, $webpPath);
+    imagedestroy($image);
+
+    if (file_exists($path)) {
+      unlink($path);
+    }
+
+    $media->file_name = pathinfo($webpPath, PATHINFO_BASENAME);
+    $media->mime_type = 'image/webp';
+    $media->extension = 'webp';
+    $media->save();
   }
 }
