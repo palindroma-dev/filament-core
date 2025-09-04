@@ -26,7 +26,7 @@ trait ImageHelpers
     $print = $cfg['print'] ?? true;
     $collection = $cfg['collection'] ?? 'images';
     $attributes = $cfg['attributes'] ?? [];
-    
+
     $attributesString = '';
     foreach($attributes as $key => $value) {
       $attributesString .= $key . '="' . $value . '" ';
@@ -44,6 +44,9 @@ trait ImageHelpers
       if($firstImage->extension == 'svg') {
         $output = $firstImage->img('', array_merge($attrs, $attributes));
       } else {
+        if(app()->getLocale() == 'en') {
+          $firstImage->name = $this->georgian_to_latin($firstImage->name);
+        }
         $output = $firstImage->img($size, array_merge($attrs, $attributes))->lazy();
       }
     } else {
@@ -99,5 +102,19 @@ trait ImageHelpers
           ->performOnCollections($collection);
       }
     }
+  }
+
+  private function georgian_to_latin(string $text): string {
+    static $map = [
+      'ა' => 'a', 'ბ' => 'b', 'გ' => 'g', 'დ' => 'd', 'ე' => 'e',
+      'ვ' => 'v', 'ზ' => 'z', 'თ' => 't', 'ი' => 'i', 'კ' => 'k',
+      'ლ' => 'l', 'მ' => 'm', 'ნ' => 'n', 'ო' => 'o', 'პ' => 'p',
+      'ჟ' => 'zh', 'რ' => 'r', 'ს' => 's', 'ტ' => 't', 'უ' => 'u',
+      'ფ' => 'f', 'ქ' => 'k', 'ღ' => 'gh', 'ყ' => 'q', 'შ' => 'sh',
+      'ჩ' => 'ch', 'ც' => 'ts', 'ძ' => 'dz', 'წ' => 'ts', 'ჭ' => 'ch',
+      'ხ' => 'kh', 'ჯ' => 'j', 'ჰ' => 'h',
+    ];
+
+    return strtr($text, $map);
   }
 }
