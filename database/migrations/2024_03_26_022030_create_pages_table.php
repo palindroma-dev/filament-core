@@ -25,7 +25,13 @@ return new class extends Migration {
       $table->boolean('noindex')->default(false);
     });
 
-    DB::statement('CREATE INDEX idx_pages_title ON pages USING gin (title jsonb_path_ops);');
+    $driver = DB::getDriverName();
+
+    if ($driver === 'pgsql') {
+        DB::statement(
+            'CREATE INDEX idx_pages_title ON pages USING gin (title jsonb_path_ops);'
+        );
+    }
   }
 
   public function down()
